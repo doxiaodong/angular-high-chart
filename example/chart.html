@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="angular-high-chart">
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>high-chart example</title>
+  <script src="http://cdn.bootcss.com/angular.js/1.4.3/angular.min.js"></script>
+  <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+
+</head>
+<body>
+  <div ng-controller="HighChartCtrl">
+    <div id="highcharts0" high-chart type="chart" config="chartOption" update-all style="width: 80%; height: 500px;"></div>
+    <button ng-click="update()">更新图表</button>
+  </div>
+
+  <script>
+    var myApp = angular.module('angular-high-chart', []);
+    myApp.controller('HighChartCtrl',['$scope', function($scope) {
+      $scope.data1 = [1, 0, 4];
+      $scope.data2 = [5, 7, 3];
+
+      var getData = function(data1, data2) {
+        $scope.chartOption = {
+          chart: {
+            renderTo: 'highcharts0',
+            backgroundColor: '#eee'
+          },
+          title: {
+            text: 'high-chart example'
+          },
+          credits: {
+            href: 'http://www.darlin.me/',
+            text: 'www.darlin.me'
+          },
+          xAxis: {
+            categories: ['Apples', 'Bananas', 'Oranges']
+          },
+          yAxis: {
+            title: {
+              text: 'Fruit eaten'
+            }
+          },
+          series: [{
+            name: 'Jane',
+            data: data1
+          }, {
+            name: 'John',
+            data: data2
+          }]
+        };
+      };
+      getData($scope.data1, $scope.data2);
+
+      $scope.update = function() {
+        $scope.data1 = [3, 5, 10];
+        $scope.data2 = [15, 4, 8];
+        getData($scope.data1, $scope.data2);
+      };
+    }]);
+
+  </script>
+  <script src="../high-chart.js"></script>
+</body>
+</html>

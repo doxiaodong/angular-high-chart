@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng-app="angular-high-chart">
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>high-stock example</title>
+  <script src="http://cdn.bootcss.com/angular.js/1.4.3/angular.min.js"></script>
+  <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
+  <script src="http://code.highcharts.com/stock/highstock.js"></script>
+  <script src="stock-data.js"></script>
+
+</head>
+<body>
+<div ng-controller="HighChartCtrl">
+  <div id="highcharts0" high-chart type="stock" config="stockOption" update-all style="width: 80%; height: 500px;"></div>
+</div>
+
+<script>
+  var myApp = angular.module('angular-high-chart', []);
+  myApp.controller('HighChartCtrl',['$scope', function($scope) {
+
+    var getData = function(stockData) {
+      $scope.stockOption = {
+        chart: {
+          renderTo: 'highcharts0',
+          backgroundColor: '#eee'
+        },
+        credits: {
+          href: 'http://www.darlin.me/',
+          text: 'www.darlin.me'
+        },
+        xAxis: {
+          dateTimeLabelFormats: {
+            second: '%H:%M:%S',
+            minute: '%H:%M',
+            hour: '%H:%M',
+            day: '%m-%d',
+            week: '%Y-%m-%d',
+            month: '%Y-%m',
+            year: '%Y'
+          }
+        },
+        yAxis: {
+          labels: {
+            formatter: function() {
+              return this.value + ' M';
+            }
+          }
+        },
+        navigator: {
+          dateTimeLabelFormats: {
+            second: '%H:%M:%S',
+            minute: '%H:%M',
+            hour: '%H:%M',
+            day: '%m-%d',
+            week: '%Y-%m-%d',
+            month: '%Y-%m',
+            year: '%Y'
+          }
+        },
+        series: [{
+          name: 'stock',
+          data: stockData
+        }]
+      };
+    };
+
+    getData(stockData);
+
+  }]);
+
+</script>
+<script src="../high-chart.js"></script>
+</body>
+</html>
