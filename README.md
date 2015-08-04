@@ -23,7 +23,7 @@
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/maps/modules/map.js"></script>
 
-highchart-stock && 地图
+# highchart-stock && 地图
 <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
 <script src="http://code.highcharts.com/stock/highstock.js"></script>
 <script src="http://code.highcharts.com/maps/modules/map.js"></script>
