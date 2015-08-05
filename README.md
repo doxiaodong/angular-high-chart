@@ -1,9 +1,9 @@
 # angular-high-chart
 
 ### 预览地址
-  1. [chart](http://www.darlin.me/example/highchart/chart.html)
-  2. [stock](http://www.darlin.me/example/highchart/stock.html)
-  3. [map](http://www.darlin.me/example/highchart/map.html)
+  1. [chart](https://dn-darlinme.qbox.me/example/highchart/chart.html)
+  2. [stock](https://dn-darlinme.qbox.me/example/highchart/stock.html)
+  3. [map](https://dn-darlinme.qbox.me/example/highchart/map.html)
 
 ### 简介与说明
 
