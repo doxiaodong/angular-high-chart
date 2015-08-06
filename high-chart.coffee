@@ -52,7 +52,7 @@ myApp
       scope.$watch 'config', (newValue, oldValue)->
         if newValue != oldValue && scope.config
 
-          # 如果要更新rangeSelector 设置 update-range-selector
+          # 如果要更新rangeSelector 设置 update-all
           if type == 'stock' && update
             chart = new Highcharts.StockChart scope.config
             return
