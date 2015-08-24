@@ -1,11 +1,22 @@
+'use strict';
 myApp.directive('highChart', function() {
   return {
     restrict: 'AE',
     scope: {
-      config: '='
+      config: '=',
+      redraw: '='
     },
     link: function(scope, element, attr) {
-      var chart, defaultConfig, renderChart, type, update;
+      var chart, defaultConfig, redraw, renderChart, type, update;
+      if (scope.config === void 0) {
+        scope.config = scope.$parent.$parent[attr.config];
+      }
+      if (attr.redraw !== void 0 && scope.redraw === void 0) {
+        scope.redraw = scope.$parent.$parent[attr.redraw];
+        scope.$parent.$parent.$watch(attr.redraw, function() {
+          return scope.redraw = scope.$parent.$parent[attr.redraw];
+        });
+      }
       Highcharts.setOptions({
         global: {
           useUTC: false
@@ -20,8 +31,8 @@ myApp.directive('highChart', function() {
           backgroundColor: 'transparent'
         },
         credits: {
-          href: 'http://www.darlin.me/',
-          text: 'www.darlin.me'
+          href: 'https://darlin.me/',
+          text: 'darlin.me'
         },
         rangeSelector: {
           inputEnabled: false,
@@ -57,19 +68,30 @@ myApp.directive('highChart', function() {
           }
         }
       };
+      redraw = function() {
+        if (type === 'stock') {
+          chart = new Highcharts.StockChart(scope.config);
+          return;
+        }
+        if (type === 'chart') {
+          chart = new Highcharts.Chart(scope.config);
+          return;
+        }
+        if (type === 'map') {
+          return chart = new Highcharts.Map(scope.config);
+        }
+      };
       renderChart(type);
+      scope.$watch('redraw', function(newValue, oldValue) {
+        if (newValue !== oldValue && scope.config) {
+          console.log('redraw');
+          return redraw();
+        }
+      });
       return scope.$watch('config', function(newValue, oldValue) {
         if (newValue !== oldValue && scope.config) {
-          if (type === 'stock' && update) {
-            chart = new Highcharts.StockChart(scope.config);
-            return;
-          }
-          if (type === 'chart' && update) {
-            chart = new Highcharts.Chart(scope.config);
-            return;
-          }
-          if (type === 'map' && update) {
-            chart = new Highcharts.Map(scope.config);
+          if (update) {
+            redraw();
             return;
           }
           if (scope.config.series) {
@@ -91,7 +113,7 @@ myApp.directive('highChart', function() {
             return chart.yAxis[0].update(scope.config.yAxis);
           }
         }
-      });
+      }, true);
     }
   };
 });
