@@ -1,13 +1,15 @@
 'use strict';
+
+// https://github.com/doxiaodong/angular-high-chart
+
 myApp.directive('highChart', function() {
   return {
     restrict: 'AE',
     scope: {
-      config: '=',
-      redraw: '='
+      config: '='
     },
     link: function(scope, element, attr) {
-      var chart, defaultConfig, redraw, renderChart, type, update;
+      var chart, defaultConfig, renderChart, resetDefaultConfig, type, update;
       if (scope.config === void 0) {
         scope.config = scope.$parent.$parent[attr.config];
       }
@@ -25,73 +27,88 @@ myApp.directive('highChart', function() {
       type = attr.type.toLocaleLowerCase();
       update = attr.updateAll !== void 0;
       chart = null;
-      defaultConfig = {
-        chart: {
-          renderTo: attr.id,
-          backgroundColor: 'transparent'
-        },
-        credits: {
-          href: 'https://darlin.me/',
-          text: 'darlin.me'
-        },
-        rangeSelector: {
-          inputEnabled: false,
-          selected: 0,
-          enabled: false
-        },
-        series: [
-          {
-            data: [0]
+      defaultConfig = null;
+      resetDefaultConfig = function() {
+        var disAxis;
+        disAxis = {
+          title: {
+            text: ''
+          },
+          legend: {
+            enabled: false
+          },
+          navigation: {
+            buttonOptions: {
+              enabled: false
+            }
+          },
+          xAxis: {
+            labels: {
+              enabled: false
+            }
+          },
+          yAxis: {
+            labels: {
+              enabled: false
+            },
+            title: {
+              text: ''
+            }
+          },
+          plotOptions: {
+            series: {
+              marker: {
+                enabled: false
+              }
+            }
+          },
+          colors: ['rgba(53, 174, 152, 0.75)', 'rgba(241, 10, 65, 0.75)'],
+          credits: {
+            enabled: false
           }
-        ]
+        };
+        defaultConfig = {
+          chart: {
+            renderTo: element[0],
+            backgroundColor: 'transparent'
+          },
+          credits: {
+            href: 'https://darlin.me/',
+            text: 'darlin.me'
+          },
+          rangeSelector: {
+            inputEnabled: false,
+            selected: 0,
+            enabled: false
+          }
+        };
+        if (attr.disaxis !== void 0) {
+          return angular.merge(defaultConfig, disAxis);
+        }
       };
+      resetDefaultConfig();
       renderChart = function(type) {
-        if (type === 'map') {
-          if (scope.config) {
-            chart = new Highcharts.Map(scope.config);
-          } else {
-            chart = new Highcharts.Map(defaultConfig);
-          }
-        }
-        if (type === 'chart') {
-          if (scope.config) {
-            chart = new Highcharts.Chart(scope.config);
-          } else {
-            chart = new Highcharts.Chart(defaultConfig);
-          }
-        }
-        if (type === 'stock') {
-          if (scope.config) {
-            return chart = new Highcharts.StockChart(scope.config);
-          } else {
-            return chart = new Highcharts.StockChart(defaultConfig);
-          }
-        }
-      };
-      redraw = function() {
-        if (type === 'stock') {
-          chart = new Highcharts.StockChart(scope.config);
-          return;
-        }
-        if (type === 'chart') {
-          chart = new Highcharts.Chart(scope.config);
-          return;
+        var config;
+        resetDefaultConfig();
+        config = defaultConfig;
+        if (scope.config) {
+          angular.merge(config, scope.config);
         }
         if (type === 'map') {
-          return chart = new Highcharts.Map(scope.config);
+          chart = new Highcharts.Map(config);
+        }
+        if (type === 'chart') {
+          chart = new Highcharts.Chart(config);
+        }
+        if (type === 'stock') {
+          return chart = new Highcharts.StockChart(config);
         }
       };
       renderChart(type);
-      scope.$watch('redraw', function(newValue, oldValue) {
-        if (newValue !== oldValue && scope.config) {
-          console.log('redraw');
-          return redraw();
-        }
-      });
       return scope.$watch('config', function(newValue, oldValue) {
         if (newValue !== oldValue && scope.config) {
           if (update) {
-            redraw();
+            renderChart(type);
             return;
           }
           if (scope.config.series) {

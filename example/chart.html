@@ -10,7 +10,7 @@
 </head>
 <body>
   <div ng-controller="HighChartCtrl">
-    <div id="highcharts0" high-chart type="chart" config="chartOption" update-all style="width: 100%; height: 500px;"></div>
+    <div high-chart type="chart" config="chartOption" update-all style="width: 100%; height: 500px;"></div>
     <button ng-click="update()">更新图表</button>
   </div>
 
@@ -23,15 +23,10 @@
       var getData = function(data1, data2) {
         $scope.chartOption = {
           chart: {
-            renderTo: 'highcharts0',
             backgroundColor: '#eee'
           },
           title: {
             text: 'high-chart example'
-          },
-          credits: {
-            href: 'https://darlin.me/',
-            text: 'darlin.me'
           },
           xAxis: {
             categories: ['Apples', 'Bananas', 'Oranges']

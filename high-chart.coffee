@@ -1,11 +1,12 @@
 'use strict'
 
-myApp
+# https://github.com/doxiaodong/angular-high-chart
+
+angular.module 'app'
   .directive 'highChart', ->
     restrict: 'AE'
     scope:
       config: '='
-      redraw: '='
     link: (scope, element, attr) ->
 
       #  for highcharts in a directive
@@ -26,63 +27,76 @@ myApp
       chart = null
 
       # 使用以下配置在你的配置准备好之前
-      defaultConfig =
-        chart:
-          renderTo: attr.id
-          backgroundColor: 'transparent'
-        credits:
-          href: 'https://darlin.me/'
-          text: 'darlin.me'
-        rangeSelector:
-          inputEnabled: false
-          selected: 0
-          enabled: false
-        series: [
-          {
-            data: [0]
-          }
-        ]
+      defaultConfig = null
+
+      resetDefaultConfig = ->
+
+        disAxis =
+          title:
+            text: ''
+          legend:
+            enabled: false
+          navigation:
+            buttonOptions:
+              enabled: false
+          xAxis:
+            labels:
+              enabled: false
+          yAxis:
+            labels:
+              enabled: false
+            title:
+              text: ''
+          plotOptions:
+            series:
+              marker:
+                enabled:false
+          colors: [
+            'rgba(53, 174, 152, 0.75)',
+            'rgba(241, 10, 65, 0.75)'
+          ]
+          credits:
+            enabled: false
+
+        defaultConfig =
+          chart:
+            renderTo: element[0]
+            backgroundColor: 'transparent'
+          credits:
+            href: 'https://darlin.me/'
+            text: 'darlin.me'
+          rangeSelector:
+            inputEnabled: false
+            selected: 0
+            enabled: false
+
+        if attr.disaxis != undefined
+          angular.merge defaultConfig, disAxis
+
+      resetDefaultConfig()
 
       renderChart = (type) ->
-        if type == 'map'
-          if scope.config
-            chart = new Highcharts.Map scope.config
-          else
-            chart = new Highcharts.Map defaultConfig
-        if type == 'chart'
-          if scope.config
-            chart = new Highcharts.Chart scope.config
-          else
-            chart = new Highcharts.Chart defaultConfig
-        if type == 'stock'
-          if scope.config
-            chart = new Highcharts.StockChart scope.config
-          else
-            chart = new Highcharts.StockChart defaultConfig
 
-      redraw = ->
-        if type == 'stock'
-          chart = new Highcharts.StockChart scope.config
-          return
-        if type == 'chart'
-          chart = new Highcharts.Chart scope.config
-          return
+        resetDefaultConfig()
+
+        config = defaultConfig
+        angular.merge config, scope.config if scope.config
+
         if type == 'map'
-          chart = new Highcharts.Map scope.config
+          chart = new Highcharts.Map config
+        if type == 'chart'
+          chart = new Highcharts.Chart config
+        if type == 'stock'
+          chart = new Highcharts.StockChart config
 
       renderChart type
-
-      scope.$watch 'redraw', (newValue, oldValue) ->
-        if newValue != oldValue && scope.config
-          console.log 'redraw'
-          redraw()
 
       scope.$watch 'config', (newValue, oldValue) ->
         if newValue != oldValue && scope.config
 
           # 如果要更新rangeSelector 设置 update-all
           if update
-            redraw()
+            renderChart type
             return
 
           # it is not effect for the next updates if the highchart in a directive
