@@ -9,14 +9,9 @@ angular.module 'app'
       config: '='
     link: (scope, element, attr) ->
 
-      #  for highcharts in a directive
+      # for highcharts in a directive
       if scope.config == undefined
         scope.config = scope.$parent.$parent[attr.config]
-
-      if attr.redraw != undefined && scope.redraw == undefined
-        scope.redraw = scope.$parent.$parent[attr.redraw]
-        scope.$parent.$parent.$watch attr.redraw, ->
-          scope.redraw = scope.$parent.$parent[attr.redraw]
 
       Highcharts.setOptions(
         global:

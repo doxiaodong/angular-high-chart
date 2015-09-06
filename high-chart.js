@@ -13,12 +13,6 @@ myApp.directive('highChart', function() {
       if (scope.config === void 0) {
         scope.config = scope.$parent.$parent[attr.config];
       }
-      if (attr.redraw !== void 0 && scope.redraw === void 0) {
-        scope.redraw = scope.$parent.$parent[attr.redraw];
-        scope.$parent.$parent.$watch(attr.redraw, function() {
-          return scope.redraw = scope.$parent.$parent[attr.redraw];
-        });
-      }
       Highcharts.setOptions({
         global: {
           useUTC: false
