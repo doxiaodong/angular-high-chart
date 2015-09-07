@@ -60,10 +60,6 @@ angular.module 'app'
           credits:
             href: 'https://darlin.me/'
             text: 'darlin.me'
-          rangeSelector:
-            inputEnabled: false
-            selected: 0
-            enabled: false
 
         if attr.disaxis != undefined
           angular.merge defaultConfig, disAxis

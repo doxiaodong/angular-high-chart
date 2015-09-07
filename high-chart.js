@@ -56,7 +56,6 @@ myApp.directive('highChart', function() {
               }
             }
           },
-          colors: ['rgba(53, 174, 152, 0.75)', 'rgba(241, 10, 65, 0.75)'],
           credits: {
             enabled: false
           }
@@ -70,11 +69,7 @@ myApp.directive('highChart', function() {
             href: 'https://darlin.me/',
             text: 'darlin.me'
           },
-          rangeSelector: {
-            inputEnabled: false,
-            selected: 0,
-            enabled: false
-          }
+          colors: ['rgba(53, 174, 152, 0.75)', 'rgba(241, 10, 65, 0.75)'],
         };
         if (attr.disaxis !== void 0) {
           return angular.merge(defaultConfig, disAxis);
