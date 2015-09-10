@@ -2,7 +2,7 @@
 
 // https://github.com/doxiaodong/angular-high-chart
 
-myApp.directive('highChart', function() {
+myApp.directive('highChart', function($timeout) {
   return {
     restrict: 'AE',
     scope: {
@@ -77,21 +77,24 @@ myApp.directive('highChart', function() {
       };
       resetDefaultConfig();
       renderChart = function(type) {
-        var config;
-        resetDefaultConfig();
-        config = defaultConfig;
-        if (scope.config) {
-          angular.merge(config, scope.config);
-        }
-        if (type === 'map') {
-          chart = new Highcharts.Map(config);
-        }
-        if (type === 'chart') {
-          chart = new Highcharts.Chart(config);
-        }
-        if (type === 'stock') {
-          return chart = new Highcharts.StockChart(config);
-        }
+        $timeout(function() {
+          var config;
+          resetDefaultConfig();
+          config = defaultConfig;
+          if (scope.config) {
+            angular.merge(config, scope.config);
+          }
+          if (type === 'map') {
+            chart = new Highcharts.Map(config);
+          }
+          if (type === 'chart') {
+            chart = new Highcharts.Chart(config);
+          }
+          if (type === 'stock') {
+            return chart = new Highcharts.StockChart(config);
+          }
+        }, 10)
+        
       };
       renderChart(type);
       return scope.$watch('config', function(newValue, oldValue) {
