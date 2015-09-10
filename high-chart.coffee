@@ -3,7 +3,7 @@
 # https://github.com/doxiaodong/angular-high-chart
 
 angular.module 'app'
-  .directive 'highChart', ->
+  .directive 'highChart', ($timeout) ->
     restrict: 'AE'
     scope:
       config: '='
@@ -68,17 +68,19 @@ angular.module 'app'
 
       renderChart = (type) ->
 
-        resetDefaultConfig()
+        $timeout ->
+          resetDefaultConfig()
 
-        config = defaultConfig
-        angular.merge config, scope.config if scope.config
+          config = defaultConfig
+          angular.merge config, scope.config if scope.config
 
-        if type == 'map'
-          chart = new Highcharts.Map config
-        if type == 'chart'
-          chart = new Highcharts.Chart config
-        if type == 'stock'
-          chart = new Highcharts.StockChart config
+          if type == 'map'
+            chart = new Highcharts.Map config
+          if type == 'chart'
+            chart = new Highcharts.Chart config
+          if type == 'stock'
+            chart = new Highcharts.StockChart config
+        , 10
 
       renderChart type
 
